@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 const stays = [
-  { name: 'Sawbhagya Hostel', place: 'pabahinna', distance: '8 min to University of Sabaragamuwa', price: '10,000', rating: '4.9', tag: 'Student favourite', image: 'photo-1600585154340-be6161a56a0c', alt: 'Tropical residence surrounded by palms' },
+  { name: 'Palm Grove Student Residence', place: 'Katubedda, Moratuwa', distance: '8 min to University of Sabaragamuwa', price: '8,000', rating: '4.9', tag: 'Student favourite', image: 'photo-1600585154340-be6161a56a0c', alt: 'Tropical residence surrounded by palms' },
   { name: 'Shan Boarding House', place: 'Nugegoda, Colombo', distance: '12 min to University of Sabaragamuwa', price: '10,000', rating: '4.8', tag: 'Only 3 beds left', image: 'photo-1600607687939-ce8a6c25118c', alt: 'Warm courtyard of a boarding house' },
   { name: 'Samanala lodge', place: 'Peradeniya, Kandy', distance: '10 min to University of Sabaragamuwa', price: '9,000', rating: '4.8', tag: 'Great value', image: 'photo-1600047550580-0d1d2db913b9', alt: 'Quiet home in a green garden' },
 ]
@@ -36,6 +36,33 @@ function SiteFooter() {
   return <footer className="footer"><div className="footer-main wrap"><a className="brand footer-brand" href="/"><span className="brand-mark"><Icon name="home" size={17}/></span><span>StayMate</span></a><span>A place to belong. A better way to live.</span><nav><a href="/search">About us</a><a href="/search">Help centre</a><a href="#provider">For providers</a></nav></div><div className="footer-bottom wrap"><span>© 2026 StayMate · Made for student life in Sri Lanka</span><div><a href="/search">Privacy policy</a><a href="/search">Terms of service</a></div></div></footer>
 }
 
+function ListingUpload({ navigate }) {
+  const [photos, setPhotos] = useState([])
+  const addPhotos = (files) => setPhotos((current) => [...current, ...Array.from(files).filter((file) => file.type.startsWith('image/')).slice(0, 12 - current.length).map((file) => ({ name: file.name, url: URL.createObjectURL(file) }))])
+  return <main className="listing-page"><div className="listing-wrap"><button className="back-link" onClick={() => navigate('/')}>← Back to StayMate</button><div className="listing-heading"><div><span className="eyebrow">FOR HOSTEL PROVIDERS</span><h1>Let’s get your place noticed.</h1><p>Share photos and a few details to help students picture their next home.</p></div><span className="listing-step">STEP 1 OF 3 · Photos &amp; details</span></div><section className="listing-card"><div className="listing-section-title"><span className="section-number">01</span><div><h2>Show off your space</h2><p>Add up to 12 photos of your residence.</p></div></div><label className="photo-dropzone"><input type="file" accept="image/*" multiple onChange={(event) => addPhotos(event.target.files)}/><span className="upload-icon"><Icon name="home"/></span><h3>Choose photos from your device</h3><small>JPG, PNG or WebP · Up to 12 photos</small></label><div className="photo-grid">{photos.map((photo, index) => <figure className="photo-preview" key={`${photo.name}-${index}`}><img src={photo.url} alt={photo.name}/></figure>)}</div></section></div></main>
+}
+
+const photoUrl = (id, width = 1200) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`
+
+function ResidenceDetails({ navigate, stay }) {
+  const gallery = [stay.image, 'photo-1600607687939-ce8a6c25118c', 'photo-1600210492486-724fe5c67fb0', 'photo-1600566753086-00f18fb6b3ea', 'photo-1600047550580-0d1d2db913b9']
+  const [saved, setSaved] = useState(false)
+  return <main className="detail-page"><div className="detail-wrap">
+    <div className="breadcrumbs"><button onClick={() => navigate('/')}>Home</button><span>/</span><button onClick={() => navigate('/search')}>Explore</button><span>/</span><span>{stay.name}</span></div>
+    <div className="detail-title"><div><h1>{stay.name}</h1><p>{stay.place} · {stay.distance}</p><div className="detail-badges"><span>StayMate verified</span><strong>★ {stay.rating} · 86 reviews</strong><span>{stay.residence || 'Student residence'} · Hosted by Saman Fernando</span></div></div><div className="detail-actions"><button onClick={() => navigator.clipboard?.writeText(window.location.href)}>↗ <span>Share</span></button><button className={saved ? 'is-saved' : ''} onClick={() => setSaved(!saved)}>♡ <span>{saved ? 'Saved' : 'Save'}</span></button></div></div>
+    <div className="detail-gallery">{gallery.map((photo, index) => <img key={`${photo}-${index}`} src={photoUrl(photo, index === 0 ? 1400 : 800)} alt={`${stay.name} ${['exterior', 'bedroom', 'shared lounge', 'kitchen', 'bathroom'][index]}`} />)}<button className="gallery-count" onClick={() => document.querySelector('.detail-gallery')?.scrollIntoView({ behavior: 'smooth' })}>▧ View all 12 photos</button></div>
+    <div className="detail-layout"><div className="detail-main">
+      <nav className="detail-tabs"><a href="#overview">Overview</a><a href="#rooms">Rooms</a><a href="#location">Location</a><a href="#reviews">Reviews</a></nav>
+      <section className="detail-section" id="overview"><h2>A calm space for your busy campus life.</h2><p>Settle into a bright, thoughtfully furnished residence on a quiet lane. With study-friendly spaces, a shared kitchen, and campus just a short walk away, {stay.name.split(' ')[0]} makes it easy to feel at home from day one.</p><div className="detail-facts"><span>28 rooms</span><span>48 student beds</span><span>{stay.residence || 'Student residence'}</span><span>Minimum stay: 3 months</span></div></section>
+      <section className="detail-section"><h2>Everything you need, included</h2><div className="amenity-grid"><span>⌁ &nbsp;High-speed Wi-Fi</span><span>♧ &nbsp;24/7 security</span><span>♨ &nbsp;Shared kitchen</span><span>▤ &nbsp;Quiet study lounge</span><span>◷ &nbsp;Laundry facilities</span><span>♨ &nbsp;Hot water</span></div></section>
+      <section className="detail-section" id="rooms"><h2>Choose your room</h2><div className="room-table"><div className="room-row room-head"><span>ROOM TYPE</span><span>MONTHLY RENT</span><span>AVAILABLE</span><span></span></div><div className="room-row"><strong>Twin ensuite · 2 students</strong><span>LKR 28,000</span><span>4 beds</span><button onClick={() => navigate('/search')}>Select twin</button></div><div className="room-row"><strong>Single ensuite · 1 student</strong><span>LKR 42,000</span><span>1 room</span><button onClick={() => navigate('/search')}>Select single</button></div><div className="room-row"><strong>Triple sharing · 3 students</strong><span>LKR 22,000</span><span>Fully booked</span><span>Join waitlist</span></div></div></section>
+      <section className="detail-section"><h2>House rules, for a happy home</h2><div className="rules-grid"><span>✓ Students only · University ID required</span><span>No smoking or alcohol</span><span>✓ Quiet hours: 10 pm – 6 am</span><span>No pets · No overnight guests</span><span>✓ Visitors: 9 am – 7 pm in common areas</span><span>Check-in: 9 am – 6 pm</span></div></section>
+      <section className="detail-section" id="location"><h2>A short walk from your next chapter</h2><div className="location-box"><Icon name="pin" size={27}/><div><strong>24 Campus Lane, Katubedda, Pabahinna</strong><p>University of Sabaragamuwa · 650 m · 8 min walk</p><small>Bus stop 200 m · Grocery store 300 m · Pharmacy 450 m</small></div><button onClick={() => window.open('https://maps.google.com/?q=University+of+Sabaragamuwa', '_blank', 'noopener,noreferrer')}>Open in Maps ↗</button></div></section>
+      <section className="review-box" id="reviews"><strong>★ &nbsp;“Safe, peaceful, and so close to campus.”</strong><p>The study lounge is my favourite spot. The host is always helpful and the rooms look exactly like the photos.</p><small>Tharushi M. · Verified resident · October 2026</small></section>
+    </div><aside className="booking-card"><h2>Make yourself at home</h2><div className="booking-price">LKR {Number(stay.price).toLocaleString()} <small>/ month</small></div><span className="availability-pill">4 twin beds available</span><div className="booking-line"><span>Room type</span><strong>Twin ensuite</strong></div><div className="booking-line"><span>Move-in</span><strong>1 December 2026</strong></div><div className="booking-line"><span>Duration</span><strong>6 months</strong></div><hr/><div className="booking-line"><span>Refundable advance</span><strong>LKR 15,000</strong></div><div className="booking-line"><span>Service fee</span><strong>LKR 750</strong></div><button className="primary-button" onClick={() => navigate('/search')}>→ &nbsp; Choose your room</button><small className="booking-note">You’ll review all details before payment. Monthly rent is paid separately.</small><hr/><strong className="host-title">Meet your host</strong><p className="host-name">Saman Fernando · Verified provider</p><small className="host-reply">Usually replies within 2 hours</small><button className="question-button" onClick={() => window.location.href = 'mailto:hello@staymate.lk'}>Ask a question</button></aside></div>
+  </div></main>
+}
+
 const resultStays = [
   { name: 'Palm Grove Student Residence', place: 'Katubedda, Moratuwa', distance: '8 min to University of Sabaragamuwa', km: 1.8, price: 8000, rating: '4.9', tag: 'Student favourite', image: 'photo-1600585154340-be6161a56a0c', residence: 'Female students', room: 'Twin sharing', wifi: true, bath: true, kitchen: true, security: true },
   { name: 'Courtyard Annex', place: 'Rawathawatta, Moratuwa', distance: '2.4 km to University of Sabaragamuwa', km: 2.4, price: 9000, rating: '4.8', tag: 'Verified residence', image: 'photo-1600607687939-ce8a6c25118c', residence: 'Female students', room: 'Twin sharing', wifi: true, bath: true, kitchen: true, security: true },
@@ -54,7 +81,7 @@ const filterGroups = {
   'The essentials': ['Wi-Fi included', 'Private bathroom', 'Kitchen access', '24/7 security'],
 }
 
-function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration, setDuration, favorites, toggleFavorite }) {
+function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration, setDuration, favorites, toggleFavorite, navigate }) {
   const [minimum, setMinimum] = useState('6000')
   const [maximum, setMaximum] = useState('35000')
   const [draftFilters, setDraftFilters] = useState(['Female students', 'Twin sharing', 'Wi-Fi included', 'Private bathroom'])
@@ -112,7 +139,7 @@ function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration,
         <section className="result-listings">
           <div className="results-heading"><div><h2>{filteredStays.length} places to call home</h2><p>Near {university || 'your university'} · {new Date(`${moveIn}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p></div><select value={sort} onChange={(event) => { setSort(event.target.value); setCurrentPage(1) }} aria-label="Sort listings"><option>Recommended</option><option>Price: low to high</option><option>Top rated</option></select></div>
           <div className="active-chips">{activeFilters.map((filter) => <button key={filter} onClick={() => removeFilter(filter)}>{filter} <span>×</span></button>)}</div>
-          <div className="results-grid">{pageStays.map((stay) => <article className="result-card" key={stay.name}><div className="result-photo"><img src={`https://images.unsplash.com/${stay.image}?auto=format&fit=crop&w=1000&q=85`} alt={`${stay.name} exterior`}/><span className="stay-tag">{stay.tag}</span><button className={`favorite ${favorites.includes(stay.name) ? 'selected' : ''}`} onClick={() => toggleFavorite(stay.name)} aria-label={`${favorites.includes(stay.name) ? 'Remove' : 'Save'} ${stay.name}`}><Icon name="heart" size={19}/></button></div><div className="result-card-content"><div className="stay-meta"><span>{stay.place}</span><strong>★ {stay.rating}</strong></div><h3>{stay.name}</h3><p className="distance">{stay.distance}</p><div className="amenities"><span>Wi-Fi</span><span>Furnished</span><span>Security</span></div><div className="price"><strong>LKR {stay.price.toLocaleString()}</strong><span>/ month</span></div></div></article>)}
+          <div className="results-grid">{pageStays.map((stay) => <article className="result-card clickable-card" key={stay.name} role="link" tabIndex="0" onClick={() => navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`)} onKeyDown={(event) => { if (event.key === 'Enter') navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`) }}><div className="result-photo"><img src={`https://images.unsplash.com/${stay.image}?auto=format&fit=crop&w=1000&q=85`} alt={`${stay.name} exterior`}/><span className="stay-tag">{stay.tag}</span><button className={`favorite ${favorites.includes(stay.name) ? 'selected' : ''}`} onClick={(event) => { event.stopPropagation(); toggleFavorite(stay.name) }} aria-label={`${favorites.includes(stay.name) ? 'Remove' : 'Save'} ${stay.name}`}><Icon name="heart" size={19}/></button></div><div className="result-card-content"><div className="stay-meta"><span>{stay.place}</span><strong>★ {stay.rating}</strong></div><h3>{stay.name}</h3><p className="distance">{stay.distance}</p><div className="amenities"><span>Wi-Fi</span><span>Furnished</span><span>Security</span></div><div className="price"><strong>LKR {stay.price.toLocaleString()}</strong><span>/ month</span></div></div></article>)}
             {pageStays.length > 0 && <article className="guidance-card"><span className="eyebrow">Prefer a little guidance?</span><span className="guidance-icon">♧</span><h3>Your perfect fit is out there.</h3><p>Tell our local team about your university, budget, and move-in plans. We’ll help you shortlist the right places.</p><a className="outline-button" href="mailto:hello@staymate.lk">Talk to our team</a><small>Mon–Sat · 9 am–6 pm · Sinhala, Tamil &amp; English</small></article>}
             {pageStays.length === 0 && <div className="empty-results"><h3>No hostels match those filters</h3><p>Try widening your budget or removing a filter.</p><button className="outline-button" onClick={() => { setDraftFilters([]); setActiveFilters([]); setMinimum('0'); setMaximum('35000') }}>Clear filters</button></div>}
           </div>
@@ -131,10 +158,11 @@ function App() {
   const [budget, setBudget] = useState('15000')
   const [favorites, setFavorites] = useState([])
   const [notice, setNotice] = useState('')
-  const [page, setPage] = useState(window.location.pathname === '/search' ? 'results' : 'home')
+  const getPage = () => window.location.pathname === '/search' ? 'results' : window.location.pathname === '/hostel/new' ? 'listing' : window.location.pathname.startsWith('/hostel/') ? 'detail' : 'home'
+  const [page, setPage] = useState(getPage)
 
   useEffect(() => {
-    const syncPage = () => setPage(window.location.pathname === '/search' ? 'results' : 'home')
+    const syncPage = () => setPage(getPage())
     window.addEventListener('popstate', syncPage)
     return () => window.removeEventListener('popstate', syncPage)
   }, [])
@@ -145,9 +173,24 @@ function App() {
     setPage('results')
   }
 
+  const navigate = (path) => {
+    window.history.pushState({}, '', path)
+    setPage(getPage())
+    window.scrollTo(0, 0)
+  }
+
   const toggleFavorite = (name) => setFavorites((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name])
 
-  if (page === 'results') return <div className="site-shell"><SiteHeader/><SearchResults university={university} setUniversity={setUniversity} moveIn={moveIn} setMoveIn={setMoveIn} duration={duration} setDuration={setDuration} favorites={favorites} toggleFavorite={toggleFavorite}/><SiteFooter/></div>
+  if (page === 'listing') return <div className="site-shell"><SiteHeader/><ListingUpload navigate={navigate}/><SiteFooter/></div>
+  if (page === 'detail') {
+    const slug = decodeURIComponent(window.location.pathname.split('/').pop() || '')
+    const stay = resultStays.find((item) => item.name.toLowerCase().replaceAll(' ', '-') === slug) || (() => {
+      const homeStay = stays.find((item) => item.name.toLowerCase().replaceAll(' ', '-') === slug) || stays[0]
+      return { ...homeStay, price: Number(String(homeStay.price).replaceAll(',', '')), residence: 'Student residence' }
+    })()
+    return <div className="site-shell"><SiteHeader/><ResidenceDetails navigate={navigate} stay={stay}/><SiteFooter/></div>
+  }
+  if (page === 'results') return <div className="site-shell"><SiteHeader/><SearchResults university={university} setUniversity={setUniversity} moveIn={moveIn} setMoveIn={setMoveIn} duration={duration} setDuration={setDuration} favorites={favorites} toggleFavorite={toggleFavorite} navigate={navigate}/><SiteFooter/></div>
 
   return <div className="site-shell">
     <SiteHeader/>
@@ -178,8 +221,8 @@ function App() {
       <section className="featured wrap" id="stays">
         <div className="section-heading"><div><span className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h2>Good places. Great beginnings.</h2><p>Thoughtfully chosen for you.</p></div><a className="outline-button" href="#stays"><Icon name="arrow" size={16}/> Explore all hostels</a></div>
         {notice && <p className="search-notice" role="status">{notice}</p>}
-        <div className="stay-grid">{stays.map((stay) => <article className="stay-card" key={stay.name}>
-          <div className="stay-photo"><img src={`https://images.unsplash.com/${stay.image}?auto=format&fit=crop&w=1000&q=85`} alt={stay.alt}/><span className="stay-tag">{stay.tag}</span><button className={`favorite ${favorites.includes(stay.name) ? 'selected' : ''}`} onClick={() => toggleFavorite(stay.name)} aria-label={`${favorites.includes(stay.name) ? 'Remove' : 'Save'} ${stay.name}`}><Icon name="heart" size={19}/></button></div>
+        <div className="stay-grid">{stays.map((stay) => <article className="stay-card clickable-card" key={stay.name} role="link" tabIndex="0" onClick={() => navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`)} onKeyDown={(event) => { if (event.key === 'Enter') navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`) }}>
+          <div className="stay-photo"><img src={`https://images.unsplash.com/${stay.image}?auto=format&fit=crop&w=1000&q=85`} alt={stay.alt}/><span className="stay-tag">{stay.tag}</span><button className={`favorite ${favorites.includes(stay.name) ? 'selected' : ''}`} onClick={(event) => { event.stopPropagation(); toggleFavorite(stay.name) }} aria-label={`${favorites.includes(stay.name) ? 'Remove' : 'Save'} ${stay.name}`}><Icon name="heart" size={19}/></button></div>
           <div className="stay-content"><div className="stay-meta"><span>{stay.place}</span><strong>★ {stay.rating}</strong></div><h3>{stay.name}</h3><p className="distance">{stay.distance}</p><div className="amenities"><span>Wi-Fi</span><span>Furnished</span><span>Security</span></div><div className="price"><strong>LKR {stay.price}</strong><span>/ month</span></div></div>
         </article>)}</div>
       </section>
