@@ -14,6 +14,7 @@ router.post("/register" , async(req , res) => {
             password
         }) ;
 
+        
         res.status(201).json({
             success: true,
             message: "User created successfully",
@@ -21,8 +22,9 @@ router.post("/register" , async(req , res) => {
                 id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
-                role: newUser.role
-        }}) ;
+        }} ,
+        console.log("User created successfully ! ")
+    ) ;
     
     }
     catch(error){

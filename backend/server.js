@@ -27,7 +27,6 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use(express.json());
 //routes 
 app.use("/api/users" , userRoutes) ; 
 
