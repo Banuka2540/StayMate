@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import connectDB from './config/db.js';
+import paymentRoutes from './routes/paymentRoutes.js'; // ⭐ NEW
 
 // Recreate __dirname for ES Modules and load root .env
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +28,9 @@ app.get('/api/test', (req, res) => {
     message: "Backend is working!"
   });
 });
+
+// API Routes
+app.use('/api/payments', paymentRoutes); // ⭐ NEW
 
 const PORT = process.env.PORT || 5000;
 
