@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { SiteHeader, SiteFooter } from './components/Layout'
 import { HomePage } from './pages/HomePage'
 import { SearchPage } from './pages/SearchPage'
+import { StayDetailsPage } from './pages/StayDetailsPage'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/search" element={<SearchPage />} />
+          <Route path="/stay/:stayName" element={<StayDetailsPage />} />
           
         </Routes>
 
