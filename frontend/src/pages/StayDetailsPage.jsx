@@ -129,7 +129,12 @@ export function StayDetailsPage() {
             <span className="flex justify-between">Duration <b className="text-[#304d45]">6 months</b></span>
           </div>
           <div className="grid gap-2 py-4 text-[10px] text-[#718079]"><span className="flex justify-between">Refundable advance <b>{formatPrice(15000)}</b></span><span className="flex justify-between">Service fee <b>LKR 750</b></span></div>
-          <button className="w-full rounded-lg bg-[#17443b] py-3 text-[10px] font-bold text-white">→ Choose your room</button>
+          <Link
+            to={`/booking/reservation/${encodeURIComponent(stay.name)}`}
+            className="block w-full rounded-lg bg-[#17443b] py-3 text-center text-[10px] font-bold text-white"
+          >
+            → Choose your room
+          </Link>
           <p className="mt-3 text-[9px] leading-4 text-[#89958f]">You’ll review all details before payment. Monthly rent is paid separately.</p>
           <div className="mt-4 border-t border-[#e7ece9] pt-4 text-[10px]"><b>Meet your host</b><p className="mt-2 text-[#526860]">{stay.host} · Verified provider</p><p className="mt-1 text-[#89958f]">{stay.hostResponse}</p><button className="mt-3 w-full rounded-lg border border-[#dbe6e0] py-2 font-bold text-[#31594f]">Ask a question</button></div>
         </aside>
