@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 
 import { SiteHeader, SiteFooter } from './components/Layout'
@@ -7,6 +6,8 @@ import { SearchPage } from './pages/SearchPage'
 import { StayDetailsPage } from './pages/StayDetailsPage'
 import { BookingPage } from './pages/BookingPage'
 import { ProviderAuthPage } from './pages/ProviderAuthPage'
+import { PaymentsPage } from './pages/PaymentsPage'
+import { AdminPaymentsPage } from './pages/AdminPaymentsPage'
 
 function AppContent() {
   const { pathname } = useLocation()
@@ -25,6 +26,8 @@ function AppContent() {
         <Route path="/booking/payment/:stayName" element={<BookingPage stage="payment" />} />
         <Route path="/provider/sign-in" element={<ProviderAuthPage mode="sign-in" />} />
         <Route path="/provider/create-account" element={<ProviderAuthPage mode="create-account" />} />
+        <Route path="/payments" element={<PaymentsPage />} />
+        <Route path="/admin/payments" element={<AdminPaymentsPage />} />
       </Routes>
 
       {!isProviderAuth && <SiteFooter />}

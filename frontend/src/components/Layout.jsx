@@ -33,7 +33,7 @@ export function SiteHeader() {
           My bookings
         </a>
 
-        <a href="/search" className={`${linkStyles} hidden sm:block`}>
+        <a href="/payments" className={`${linkStyles} hidden sm:block`}>
           Payments
         </a>
       </nav>
