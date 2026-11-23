@@ -55,11 +55,11 @@ function ResidenceDetails({ navigate, stay }) {
       <nav className="detail-tabs"><a href="#overview">Overview</a><a href="#rooms">Rooms</a><a href="#location">Location</a><a href="#reviews">Reviews</a></nav>
       <section className="detail-section" id="overview"><h2>A calm space for your busy campus life.</h2><p>Settle into a bright, thoughtfully furnished residence on a quiet lane. With study-friendly spaces, a shared kitchen, and campus just a short walk away, {stay.name.split(' ')[0]} makes it easy to feel at home from day one.</p><div className="detail-facts"><span>28 rooms</span><span>48 student beds</span><span>{stay.residence || 'Student residence'}</span><span>Minimum stay: 3 months</span></div></section>
       <section className="detail-section"><h2>Everything you need, included</h2><div className="amenity-grid"><span>⌁ &nbsp;High-speed Wi-Fi</span><span>♧ &nbsp;24/7 security</span><span>♨ &nbsp;Shared kitchen</span><span>▤ &nbsp;Quiet study lounge</span><span>◷ &nbsp;Laundry facilities</span><span>♨ &nbsp;Hot water</span></div></section>
-      <section className="detail-section" id="rooms"><h2>Choose your room</h2><div className="room-table"><div className="room-row room-head"><span>ROOM TYPE</span><span>MONTHLY RENT</span><span>AVAILABLE</span><span></span></div><div className="room-row"><strong>Twin ensuite · 2 students</strong><span>LKR 28,000</span><span>4 beds</span><button onClick={() => navigate('/search')}>Select twin</button></div><div className="room-row"><strong>Single ensuite · 1 student</strong><span>LKR 42,000</span><span>1 room</span><button onClick={() => navigate('/search')}>Select single</button></div><div className="room-row"><strong>Triple sharing · 3 students</strong><span>LKR 22,000</span><span>Fully booked</span><span>Join waitlist</span></div></div></section>
+      <section className="detail-section" id="rooms"><h2>Room options and availability</h2><div className="room-table"><div className="room-row room-head"><span>ROOM TYPE</span><span>MONTHLY RENT</span><span>AVAILABILITY</span></div><div className="room-row"><strong>Twin ensuite · 2 students</strong><span>LKR 28,000</span><span>4 beds available</span></div><div className="room-row"><strong>Single ensuite · 1 student</strong><span>LKR 42,000</span><span>1 room available</span></div><div className="room-row"><strong>Triple sharing · 3 students</strong><span>LKR 22,000</span><span>Fully booked</span></div></div></section>
       <section className="detail-section"><h2>House rules, for a happy home</h2><div className="rules-grid"><span>✓ Students only · University ID required</span><span>No smoking or alcohol</span><span>✓ Quiet hours: 10 pm – 6 am</span><span>No pets · No overnight guests</span><span>✓ Visitors: 9 am – 7 pm in common areas</span><span>Check-in: 9 am – 6 pm</span></div></section>
       <section className="detail-section" id="location"><h2>A short walk from your next chapter</h2><div className="location-box"><Icon name="pin" size={27}/><div><strong>24 Campus Lane, Katubedda, Pabahinna</strong><p>University of Sabaragamuwa · 650 m · 8 min walk</p><small>Bus stop 200 m · Grocery store 300 m · Pharmacy 450 m</small></div><button onClick={() => window.open('https://maps.google.com/?q=University+of+Sabaragamuwa', '_blank', 'noopener,noreferrer')}>Open in Maps ↗</button></div></section>
       <section className="review-box" id="reviews"><strong>★ &nbsp;“Safe, peaceful, and so close to campus.”</strong><p>The study lounge is my favourite spot. The host is always helpful and the rooms look exactly like the photos.</p><small>Tharushi M. · Verified resident · October 2026</small></section>
-    </div><aside className="booking-card"><h2>Make yourself at home</h2><div className="booking-price">LKR {Number(stay.price).toLocaleString()} <small>/ month</small></div><span className="availability-pill">4 twin beds available</span><div className="booking-line"><span>Room type</span><strong>Twin ensuite</strong></div><div className="booking-line"><span>Move-in</span><strong>1 December 2026</strong></div><div className="booking-line"><span>Duration</span><strong>6 months</strong></div><hr/><div className="booking-line"><span>Refundable advance</span><strong>LKR 15,000</strong></div><div className="booking-line"><span>Service fee</span><strong>LKR 750</strong></div><button className="primary-button" onClick={() => navigate('/search')}>→ &nbsp; Choose your room</button><small className="booking-note">You’ll review all details before payment. Monthly rent is paid separately.</small><hr/><strong className="host-title">Meet your host</strong><p className="host-name">Saman Fernando · Verified provider</p><small className="host-reply">Usually replies within 2 hours</small><button className="question-button" onClick={() => window.location.href = 'mailto:hello@staymate.lk'}>Ask a question</button></aside></div>
+    </div><aside className="booking-card"><h2>Residence at a glance</h2><div className="booking-price">LKR {Number(stay.price).toLocaleString()} <small>/ month from</small></div><span className="availability-pill">4 twin beds available</span><div className="booking-line"><span>Room options</span><strong>Twin and single ensuite</strong></div><div className="booking-line"><span>Residence type</span><strong>{stay.residence || 'Student residence'}</strong></div><div className="booking-line"><span>Minimum stay</span><strong>3 months</strong></div><hr/><strong className="host-title">Verified residence</strong><p className="host-name">Listing and amenities reviewed by StayMate.</p><button className="primary-button" onClick={() => document.getElementById('rooms')?.scrollIntoView({ behavior: 'smooth' })}>View room options</button><small className="booking-note">Room prices and availability are shown in the listing details.</small></aside></div>
   </div></main>
 }
 
@@ -81,11 +81,12 @@ const filterGroups = {
   'The essentials': ['Wi-Fi included', 'Private bathroom', 'Kitchen access', '24/7 security'],
 }
 
-function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration, setDuration, favorites, toggleFavorite, navigate }) {
-  const [minimum, setMinimum] = useState('6000')
-  const [maximum, setMaximum] = useState('35000')
-  const [draftFilters, setDraftFilters] = useState(['Female students', 'Twin sharing', 'Wi-Fi included', 'Private bathroom'])
-  const [activeFilters, setActiveFilters] = useState(['Female students', 'Twin sharing', 'Wi-Fi included', 'Private bathroom'])
+function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration, setDuration, budget, favorites, toggleFavorite, navigate }) {
+  const [minimum, setMinimum] = useState('0')
+  const [maximum, setMaximum] = useState(budget || '35000')
+  const [draftFilters, setDraftFilters] = useState([])
+  const [activeFilters, setActiveFilters] = useState([])
+  const [appliedLocation, setAppliedLocation] = useState(university)
   const [distance, setDistance] = useState('Within 3 km')
   const [sort, setSort] = useState('Recommended')
   const [currentPage, setCurrentPage] = useState(1)
@@ -93,6 +94,9 @@ function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration,
 
   const toggle = (value) => setDraftFilters((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value])
   const filteredStays = resultStays.filter((stay) => {
+    const query = appliedLocation.trim().toLocaleLowerCase().split(/\s+/).filter(Boolean)
+    const listingText = `${stay.name} ${stay.place} ${stay.distance}`.toLocaleLowerCase()
+    if (query.some((term) => !listingText.includes(term))) return false
     if (stay.price < Number(minimum || 0) || stay.price > Number(maximum || 999999)) return false
     if (distance === 'Within 3 km' && stay.km > 3) return false
     if (distance === 'Within 5 km' && stay.km > 5) return false
@@ -114,7 +118,18 @@ function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration,
   const updateSearch = (event) => {
     event.preventDefault()
     setCurrentPage(1)
+    setAppliedLocation(university)
     setSearchMessage(`Search updated for ${university || 'your campus'} · ${moveIn} · ${duration}`)
+  }
+  const resetFilters = () => {
+    setDraftFilters([])
+    setActiveFilters([])
+    setMinimum('0')
+    setMaximum('35000')
+    setDistance('Any distance')
+    setAppliedLocation('')
+    setUniversity('')
+    setCurrentPage(1)
   }
 
   return <main className="results-page" id="results">
@@ -130,18 +145,18 @@ function SearchResults({ university, setUniversity, moveIn, setMoveIn, duration,
       {searchMessage && <p className="search-notice results-notice" role="status">{searchMessage}</p>}
       <div className="results-layout">
         <aside className="filter-sidebar">
-          <div className="filter-title"><h2>Make it your own</h2><button onClick={() => { setDraftFilters([]); setActiveFilters([]); setMinimum('0'); setMaximum('35000'); setCurrentPage(1) }}>Reset</button></div>
+          <div className="filter-title"><h2>Make it your own</h2><button type="button" onClick={resetFilters}>Reset</button></div>
           <div className="filter-block"><h3>Monthly budget</h3><p className="budget-range">LKR {Number(minimum || 0).toLocaleString()} – {Number(maximum || 0).toLocaleString()}</p><div className="range-track"><span/></div><div className="range-inputs"><label>Minimum<input type="number" value={minimum} min="0" onChange={(event) => setMinimum(event.target.value)}/></label><label>Maximum<input type="number" value={maximum} min="0" onChange={(event) => setMaximum(event.target.value)}/></label></div></div>
           {Object.entries(filterGroups).map(([group, values]) => <div className="filter-block" key={group}><h3>{group}</h3>{values.map((value) => <label className="check-row" key={value}><input type="checkbox" checked={draftFilters.includes(value)} onChange={() => toggle(value)}/><span>{value}</span></label>)}</div>)}
           <div className="filter-block"><h3>Distance to university</h3><select className="distance-select" value={distance} onChange={(event) => setDistance(event.target.value)}><option>Within 3 km</option><option>Within 5 km</option><option>Any distance</option></select></div>
-          <button className="primary-button apply-filters" onClick={() => { setActiveFilters(draftFilters); setCurrentPage(1) }}>Apply filters</button>
+          <button type="button" className="primary-button apply-filters" onClick={() => { setActiveFilters(draftFilters); setCurrentPage(1) }}>Apply filters</button>
         </aside>
         <section className="result-listings">
           <div className="results-heading"><div><h2>{filteredStays.length} places to call home</h2><p>Near {university || 'your university'} · {new Date(`${moveIn}T00:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</p></div><select value={sort} onChange={(event) => { setSort(event.target.value); setCurrentPage(1) }} aria-label="Sort listings"><option>Recommended</option><option>Price: low to high</option><option>Top rated</option></select></div>
           <div className="active-chips">{activeFilters.map((filter) => <button key={filter} onClick={() => removeFilter(filter)}>{filter} <span>×</span></button>)}</div>
           <div className="results-grid">{pageStays.map((stay) => <article className="result-card clickable-card" key={stay.name} role="link" tabIndex="0" onClick={() => navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`)} onKeyDown={(event) => { if (event.key === 'Enter') navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`) }}><div className="result-photo"><img src={`https://images.unsplash.com/${stay.image}?auto=format&fit=crop&w=1000&q=85`} alt={`${stay.name} exterior`}/><span className="stay-tag">{stay.tag}</span><button className={`favorite ${favorites.includes(stay.name) ? 'selected' : ''}`} onClick={(event) => { event.stopPropagation(); toggleFavorite(stay.name) }} aria-label={`${favorites.includes(stay.name) ? 'Remove' : 'Save'} ${stay.name}`}><Icon name="heart" size={19}/></button></div><div className="result-card-content"><div className="stay-meta"><span>{stay.place}</span><strong>★ {stay.rating}</strong></div><h3>{stay.name}</h3><p className="distance">{stay.distance}</p><div className="amenities"><span>Wi-Fi</span><span>Furnished</span><span>Security</span></div><div className="price"><strong>LKR {stay.price.toLocaleString()}</strong><span>/ month</span></div></div></article>)}
             {pageStays.length > 0 && <article className="guidance-card"><span className="eyebrow">Prefer a little guidance?</span><span className="guidance-icon">♧</span><h3>Your perfect fit is out there.</h3><p>Tell our local team about your university, budget, and move-in plans. We’ll help you shortlist the right places.</p><a className="outline-button" href="mailto:hello@staymate.lk">Talk to our team</a><small>Mon–Sat · 9 am–6 pm · Sinhala, Tamil &amp; English</small></article>}
-            {pageStays.length === 0 && <div className="empty-results"><h3>No hostels match those filters</h3><p>Try widening your budget or removing a filter.</p><button className="outline-button" onClick={() => { setDraftFilters([]); setActiveFilters([]); setMinimum('0'); setMaximum('35000') }}>Clear filters</button></div>}
+            {pageStays.length === 0 && <div className="empty-results"><h3>No hostels match those filters</h3><p>Try another location, a wider budget, or fewer filters.</p><button type="button" className="outline-button" onClick={resetFilters}>Clear filters</button></div>}
           </div>
           {pageCount > 1 && <nav className="pagination" aria-label="Results pages">{Array.from({ length: pageCount }, (_, index) => <button className={currentPage === index + 1 ? 'current' : ''} key={index} onClick={() => setCurrentPage(index + 1)}>{index + 1}</button>)}<button className="next-page" onClick={() => setCurrentPage((page) => page === pageCount ? 1 : page + 1)}>Next →</button></nav>}
         </section>
@@ -157,7 +172,6 @@ function App() {
   const [duration, setDuration] = useState('6 months')
   const [budget, setBudget] = useState('15000')
   const [favorites, setFavorites] = useState([])
-  const [notice, setNotice] = useState('')
   const getPage = () => window.location.pathname === '/search' ? 'results' : window.location.pathname === '/hostel/new' ? 'listing' : window.location.pathname.startsWith('/hostel/') ? 'detail' : 'home'
   const [page, setPage] = useState(getPage)
 
@@ -190,7 +204,7 @@ function App() {
     })()
     return <div className="site-shell"><SiteHeader/><ResidenceDetails navigate={navigate} stay={stay}/><SiteFooter/></div>
   }
-  if (page === 'results') return <div className="site-shell"><SiteHeader/><SearchResults university={university} setUniversity={setUniversity} moveIn={moveIn} setMoveIn={setMoveIn} duration={duration} setDuration={setDuration} favorites={favorites} toggleFavorite={toggleFavorite} navigate={navigate}/><SiteFooter/></div>
+  if (page === 'results') return <div className="site-shell"><SiteHeader/><SearchResults university={university} setUniversity={setUniversity} moveIn={moveIn} setMoveIn={setMoveIn} duration={duration} setDuration={setDuration} budget={budget} favorites={favorites} toggleFavorite={toggleFavorite} navigate={navigate}/><SiteFooter/></div>
 
   return <div className="site-shell">
     <SiteHeader/>
@@ -219,8 +233,7 @@ function App() {
       <div className="proof-row wrap"><span>✦ 1,140+ students</span><span>30 verified residences</span><span>★ 4.8 student ratings</span></div>
 
       <section className="featured wrap" id="stays">
-        <div className="section-heading"><div><span className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h2>Good places. Great beginnings.</h2><p>Thoughtfully chosen for you.</p></div><a className="outline-button" href="#stays"><Icon name="arrow" size={16}/> Explore all hostels</a></div>
-        {notice && <p className="search-notice" role="status">{notice}</p>}
+        <div className="section-heading"><div><span className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h2>Good places. Great beginnings.</h2><p>Thoughtfully chosen for you.</p></div><a className="outline-button" href="/search"><Icon name="arrow" size={16}/> Explore all hostels</a></div>
         <div className="stay-grid">{stays.map((stay) => <article className="stay-card clickable-card" key={stay.name} role="link" tabIndex="0" onClick={() => navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`)} onKeyDown={(event) => { if (event.key === 'Enter') navigate(`/hostel/${encodeURIComponent(stay.name.toLowerCase().replaceAll(' ', '-'))}`) }}>
           <div className="stay-photo"><img src={`https://images.unsplash.com/${stay.image}?auto=format&fit=crop&w=1000&q=85`} alt={stay.alt}/><span className="stay-tag">{stay.tag}</span><button className={`favorite ${favorites.includes(stay.name) ? 'selected' : ''}`} onClick={(event) => { event.stopPropagation(); toggleFavorite(stay.name) }} aria-label={`${favorites.includes(stay.name) ? 'Remove' : 'Save'} ${stay.name}`}><Icon name="heart" size={19}/></button></div>
           <div className="stay-content"><div className="stay-meta"><span>{stay.place}</span><strong>★ {stay.rating}</strong></div><h3>{stay.name}</h3><p className="distance">{stay.distance}</p><div className="amenities"><span>Wi-Fi</span><span>Furnished</span><span>Security</span></div><div className="price"><strong>LKR {stay.price}</strong><span>/ month</span></div></div>

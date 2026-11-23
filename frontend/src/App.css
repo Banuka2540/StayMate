@@ -140,7 +140,7 @@
   .detail-facts { gap: 12px 17px; }
   .amenity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 9px; font-size: 11px; }
   .room-row { grid-template-columns: 1.3fr 1fr .7fr; gap: 7px; font-size: 9px; }
-  .room-row > :last-child { display: none; }
+  .room-row > :nth-child(4) { display: none; }
   .room-row strong { font-size: 9px; }
   .room-row.room-head { font-size: 8px; }
   .rules-grid { gap: 11px; font-size: 10px; }
