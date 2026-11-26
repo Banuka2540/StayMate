@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Icon } from './Icon'
 
 const linkStyles =
@@ -32,16 +33,16 @@ export function SiteHeader() {
           My bookings
         </a>
 
-        <a href="/search" className={`${linkStyles} hidden sm:block`}>
+        <a href="/payments" className={`${linkStyles} hidden sm:block`}>
           Payments
         </a>
       </nav>
 
       {/* User Actions */}
       <div className="flex items-center gap-2 sm:gap-5">
-        <a href="#provider" className={`${linkStyles} hidden md:block`}>
+        <Link to="/provider/create-account" className={`${linkStyles} hidden md:block`}>
           List your hostel
-        </a>
+        </Link>
 
         <button
           type="button"
@@ -78,7 +79,7 @@ export function SiteFooter() {
         <nav className="flex gap-4 text-sm">
           <a href="/search">About us</a>
           <a href="/search">Help centre</a>
-          <a href="#provider">For providers</a>
+          <Link to="/provider/create-account">For providers</Link>
         </nav>
       </div>
 
