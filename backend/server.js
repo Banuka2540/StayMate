@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import connectDB from './config/db.js';
+import notificationRoutes from './routes/notificationRoutes.js';
+import reportRoutes from './routes/reportRoutes.js';
 
 // Recreate __dirname for ES Modules and load root .env
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +29,10 @@ app.get('/api/test', (req, res) => {
     message: "Backend is working!"
   });
 });
+
+// API Routes
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/reports', reportRoutes);
 
 const PORT = process.env.PORT || 5000;
 

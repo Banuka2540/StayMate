@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 import { Icon } from '../components/Icon'
+import { ReportListingModal } from '../components/ReportListingModal'
 import { getStayDetails, getStayImages, resultStays, stays } from '../data/stays'
 
 const imageUrl = (image) =>
@@ -10,6 +12,7 @@ const formatPrice = (price) => `LKR ${Number(price).toLocaleString()}`
 
 export function StayDetailsPage() {
   const { stayName } = useParams()
+  const [reportOpen, setReportOpen] = useState(false)
   const listing = [...resultStays, ...stays].find(
     (stay) => stay.name === decodeURIComponent(stayName || ''),
   )
@@ -58,6 +61,13 @@ export function StayDetailsPage() {
           </button>
           <button className="inline-flex items-center gap-2 rounded-lg border border-[#dbe6e0] bg-white px-4 py-2.5 text-[11px] font-bold text-[#264e46]">
             <Icon name="heart" size={14} /> Save
+          </button>
+          <button
+            type="button"
+            onClick={() => setReportOpen(true)}
+            className="inline-flex items-center gap-2 rounded-lg border border-[#dbe6e0] bg-white px-4 py-2.5 text-[11px] font-bold text-[#9b5b1c] hover:bg-[#fdf7f1]"
+          >
+            <Icon name="flag" size={14} /> Report
           </button>
         </div>
       </div>
@@ -139,6 +149,13 @@ export function StayDetailsPage() {
           <div className="mt-4 border-t border-[#e7ece9] pt-4 text-[10px]"><b>Meet your host</b><p className="mt-2 text-[#526860]">{stay.host} · Verified provider</p><p className="mt-1 text-[#89958f]">{stay.hostResponse}</p><button className="mt-3 w-full rounded-lg border border-[#dbe6e0] py-2 font-bold text-[#31594f]">Ask a question</button></div>
         </aside>
       </div>
+
+      <ReportListingModal
+        open={reportOpen}
+        onClose={() => setReportOpen(false)}
+        defaultTargetName={stay.name}
+        defaultTargetType="Hostel"
+      />
     </main>
   )
 }
