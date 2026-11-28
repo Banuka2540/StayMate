@@ -105,6 +105,10 @@ export function SiteHeader() {
           My bookings
         </NavLink>
 
+        <NavLink to="/payments" className={({ isActive }) => `${navClass({ isActive })} hidden sm:block`}>
+          Payments
+        </NavLink>
+
         <NavLink to="/notifications" className={navClass}>
           Notifications
           {unreadCount > 0 && (
@@ -121,9 +125,9 @@ export function SiteHeader() {
 
       {/* User Actions */}
       <div className="flex items-center gap-2 sm:gap-4" ref={dropdownRef}>
-        <a href="/#provider" className={`${linkStyles} hidden lg:block`}>
+        <Link to="/provider/create-account" className={`${linkStyles} hidden md:block`}>
           List your hostel
-        </a>
+        </Link>
 
         <div className="relative">
           <button
@@ -283,7 +287,7 @@ export function SiteFooter() {
           <Link to="/search">Explore hostels</Link>
           <Link to="/notifications">Notifications</Link>
           <Link to="/reports">System reports</Link>
-          <a href="/#provider">For providers</a>
+          <Link to="/provider/create-account">For providers</Link>
         </nav>
       </div>
 

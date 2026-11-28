@@ -259,10 +259,10 @@ export function HomePage({
           </p>
         </div>
 
-        <a className={button} href="mailto:hello@staymate.lk">
+        <Link className={button} to="/provider/create-account">
           <Icon name="arrow" size={16} />
           Become a provider
-        </a>
+        </Link>
       </section>
 
     </main>
